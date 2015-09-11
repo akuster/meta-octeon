@@ -1,0 +1,85 @@
+From c9880db79bc9565b54581b467321b1f864f993cb Mon Sep 17 00:00:00 2001
+From: Armin Kuster <akuster808@gmail.com>
+Date: Tue, 4 Aug 2015 07:45:29 -0700
+Subject: [PATCH] lib: mpi: Use "static inline" instead of "extern inline" in
+ header file for __GNUC__
+
+In header file, "extern inline" may cause multiple definition, so need
+change it to "static inline". And also need be quoted  by __GNUC__ for
+they are as inline functions only for __GNUC__.
+
+The related error (with allmodconfig under tile):
+
+LD      lib/mpi/mpi.o
+lib/mpi/generic_mpih-mul1.o: In function `mpihelp_add_1':
+generic_mpih-mul1.c:(.text+0x0): multiple definition of `mpihelp_add_1'
+lib/mpi/generic_mpih-lshift.o:generic_mpih-lshift.c:(.text+0x0): first defined here
+lib/mpi/generic_mpih-mul1.o: In function `mpihelp_add':
+generic_mpih-mul1.c:(.text+0xe8): multiple definition of `mpihelp_add'
+lib/mpi/generic_mpih-lshift.o:generic_mpih-lshift.c:(.text+0xe8): first defined here
+lib/mpi/generic_mpih-mul1.o: In function `mpihelp_sub_1':
+generic_mpih-mul1.c:(.text+0x278): multiple definition of `mpihelp_sub_1'
+lib/mpi/generic_mpih-lshift.o:generic_mpih-lshift.c:(.text+0x278): first defined here
+lib/mpi/generic_mpih-mul1.o: In function `mpihelp_sub':
+generic_mpih-mul1.c:(.text+0x368): multiple definition of `mpihelp_sub'
+lib/mpi/generic_mpih-lshift.o:generic_mpih-lshift.c:(.text+0x368): first defined here
+...
+
+Signed-off-by: Chen Gang <gang.chen.5i5j@gmail.com>
+
+Signed-off-by: Armin Kuster <akuster808@gmail.com>
+---
+ lib/mpi/mpi-inline.h   |  2 +-
+ lib/mpi/mpi-internal.h | 13 ++++++++-----
+ 2 files changed, 9 insertions(+), 6 deletions(-)
+
+diff --git a/lib/mpi/mpi-inline.h b/lib/mpi/mpi-inline.h
+index e2b3985..c245ea3 100644
+--- a/lib/mpi/mpi-inline.h
++++ b/lib/mpi/mpi-inline.h
+@@ -30,7 +30,7 @@
+ #define G10_MPI_INLINE_H
+ 
+ #ifndef G10_MPI_INLINE_DECL
+-#define G10_MPI_INLINE_DECL  extern inline
++#define G10_MPI_INLINE_DECL  static inline
+ #endif
+ 
+ G10_MPI_INLINE_DECL mpi_limb_t
+diff --git a/lib/mpi/mpi-internal.h b/lib/mpi/mpi-internal.h
+index 60cf765..0a8e563 100644
+--- a/lib/mpi/mpi-internal.h
++++ b/lib/mpi/mpi-internal.h
+@@ -168,21 +168,24 @@ void mpi_rshift_limbs(MPI a, unsigned int count);
+ int mpi_lshift_limbs(MPI a, unsigned int count);
+ 
+ /*-- mpihelp-add.c --*/
++#ifndef __GNUC__
+ mpi_limb_t mpihelp_add_1(mpi_ptr_t res_ptr, mpi_ptr_t s1_ptr,
+ 			 mpi_size_t s1_size, mpi_limb_t s2_limb);
+-mpi_limb_t mpihelp_add_n(mpi_ptr_t res_ptr, mpi_ptr_t s1_ptr,
+-			 mpi_ptr_t s2_ptr, mpi_size_t size);
+ mpi_limb_t mpihelp_add(mpi_ptr_t res_ptr, mpi_ptr_t s1_ptr, mpi_size_t s1_size,
+ 		       mpi_ptr_t s2_ptr, mpi_size_t s2_size);
++#endif
++mpi_limb_t mpihelp_add_n(mpi_ptr_t res_ptr, mpi_ptr_t s1_ptr,
++            mpi_ptr_t s2_ptr, mpi_size_t size);
+ 
+ /*-- mpihelp-sub.c --*/
++#ifndef __GNUC__
+ mpi_limb_t mpihelp_sub_1(mpi_ptr_t res_ptr, mpi_ptr_t s1_ptr,
+ 			 mpi_size_t s1_size, mpi_limb_t s2_limb);
+-mpi_limb_t mpihelp_sub_n(mpi_ptr_t res_ptr, mpi_ptr_t s1_ptr,
+-			 mpi_ptr_t s2_ptr, mpi_size_t size);
+ mpi_limb_t mpihelp_sub(mpi_ptr_t res_ptr, mpi_ptr_t s1_ptr, mpi_size_t s1_size,
+ 		       mpi_ptr_t s2_ptr, mpi_size_t s2_size);
+-
++#endif
++mpi_limb_t mpihelp_sub_n(mpi_ptr_t res_ptr, mpi_ptr_t s1_ptr,
++            mpi_ptr_t s2_ptr, mpi_size_t size);
+ /*-- mpihelp-cmp.c --*/
+ int mpihelp_cmp(mpi_ptr_t op1_ptr, mpi_ptr_t op2_ptr, mpi_size_t size);
+ 
+-- 
+2.3.5
+

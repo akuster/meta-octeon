@@ -1,0 +1,28 @@
+From 983d0a37fb27220d8f5e3a2888bbb50bc0a46256 Mon Sep 17 00:00:00 2001
+From: Armin Kuster <akuster808@gmail.com>
+Date: Mon, 10 Aug 2015 06:17:13 +0530
+Subject: [PATCH] cvmx-pcie: disable via config option.
+
+/arch/mips/cavium-octeon/executive/cvmx-pcie.c:308: undefined reference to `cvmx_primary_pcie_bus_number'
+
+Signed-off-by: Armin Kuster <akuster808@gmail.com>
+---
+ arch/mips/cavium-octeon/executive/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/mips/cavium-octeon/executive/Makefile b/arch/mips/cavium-octeon/executive/Makefile
+index 06bdadc..5e683c50 100644
+--- a/arch/mips/cavium-octeon/executive/Makefile
++++ b/arch/mips/cavium-octeon/executive/Makefile
+@@ -27,7 +27,7 @@ obj-y += cvmx-pko.o cvmx-spi.o cvmx-cmd-queue.o cvmx-helper-cfg.o	\
+ 	cvmx-lap.o cvmx-osm.o
+ 
+ obj-y += cvmx-helper-errata.o cvmx-helper-jtag.o
+-obj-y += cvmx-pcie.o
++obj-$(CONFIG_PCI) += cvmx-pcie.o
+ 
+ obj-$(CONFIG_USB_OCTEON_HCD)		+= cvmx-usb.o
+ obj-$(CONFIG_CAVIUM_OCTEON_RAPIDIO) 	+= cvmx-dma-engine.o
+-- 
+2.3.5
+

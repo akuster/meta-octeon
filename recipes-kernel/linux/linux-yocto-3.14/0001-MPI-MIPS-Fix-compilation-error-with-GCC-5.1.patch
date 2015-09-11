@@ -1,0 +1,45 @@
+From 070b4303ac514bc98d6ddb57d1b340cf07f8f38a Mon Sep 17 00:00:00 2001
+From: Armin Kuster <akuster808@gmail.com>
+Date: Tue, 4 Aug 2015 07:40:56 -0700
+Subject: [PATCH] MPI: MIPS: Fix compilation error with GCC 5.1
+
+This patch fixes mips compilation error:
+
+lib/mpi/generic_mpih-mul1.c: In function 'mpihelp_mul_1':
+lib/mpi/longlong.h:651:2: error: impossible constraint in 'asm'
+
+Signed-off-by: Jaedon Shin <jaedon.shin@gmail.com>
+Cc: Linux-MIPS <linux-mips@linux-mips.org>
+Patchwork: https://patchwork.linux-mips.org/patch/10546/
+Signed-off-by: Ralf Baechle <ralf@linux-mips.org>
+
+Signed-off-by: Armin Kuster <akuster808@gmail.com>
+---
+ lib/mpi/longlong.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/lib/mpi/longlong.h b/lib/mpi/longlong.h
+index aac5114..a89d041 100644
+--- a/lib/mpi/longlong.h
++++ b/lib/mpi/longlong.h
+@@ -639,7 +639,7 @@ do { \
+ 	**************  MIPS  *****************
+ 	***************************************/
+ #if defined(__mips__) && W_TYPE_SIZE == 32
+-#if __GNUC__ >= 4 && __GNUC_MINOR__ >= 4
++#if (__GNUC__ >= 5) || (__GNUC__ >= 4 && __GNUC_MINOR__ >= 4)
+ #define umul_ppmm(w1, w0, u, v)			\
+ do {						\
+ 	UDItype __ll = (UDItype)(u) * (v);	\
+@@ -671,7 +671,7 @@ do {						\
+ 	**************  MIPS/64  **************
+ 	***************************************/
+ #if (defined(__mips) && __mips >= 3) && W_TYPE_SIZE == 64
+-#if __GNUC__ >= 4 && __GNUC_MINOR__ >= 4
++#if (__GNUC__ >= 5) || (__GNUC__ >= 4 && __GNUC_MINOR__ >= 4)
+ #define umul_ppmm(w1, w0, u, v) \
+ do {									\
+ 	typedef unsigned int __ll_UTItype __attribute__((mode(TI)));	\
+-- 
+2.3.5
+

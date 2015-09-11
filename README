@@ -1,0 +1,42 @@
+OpenEmbedded BSP layer for Cavium Octeon boards 
+
+Supported Octreon Boards:
+========================
+CN78xx
+CN7130-Router-Ref
+
+This layer depends on:
+
+URI: git://git.openembedded.org/openembedded-core
+layers: meta
+branch: master
+revision: HEAD
+
+
+U-boot commands:
+================
+tftp ${loadaddr} vmlinux.64
+
+bootoctlinux ${loadaddr} coremask=f root=/dev/nfs rw console=ttyS0,115200 ip=bootp
+bootoctlinux ${loadaddr} numcores=n root=/dev/ram console=ttyS0,115200
+
+
+Initramfs
+=========
+
+Add to local.conf:
+
+INITRAMFS_IMAGE_BUNDLE="1"
+INITRAMFS_IMAGE = "core-image-minimal"
+USE_DEVFS = "0"
+
+
+Maintenance
+-----------
+
+Send pull requests, patches, comments or questions to yocto@yoctoproject.org
+
+When sending single patches, please using something like:
+'git send-email -1 -M --to akuster@mvista.com --subject-prefix=meta-odroid][PATCH'
+
+Layer Maintainer:  Armin Kuster <akuster@mvista.com>
