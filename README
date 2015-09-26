@@ -37,6 +37,6 @@ Maintenance
 Send pull requests, patches, comments or questions to yocto@yoctoproject.org
 
 When sending single patches, please using something like:
-'git send-email -1 -M --to akuster@mvista.com --subject-prefix=meta-odroid][PATCH'
+'git send-email -1 -M --to akuster@mvista.com --subject-prefix=meta-cavium][PATCH'
 
 Layer Maintainer:  Armin Kuster <akuster@mvista.com>
