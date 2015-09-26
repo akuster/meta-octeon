@@ -13,7 +13,11 @@ SRCREV_machine_router-ref-cn71xx-64 ?= "a63d40b860a6d255005a541894d53729090b40ea
 SRC_URI += "file://defconfig"
 SRC_URI += "file://0001-MPI-MIPS-Fix-compilation-error-with-GCC-5.1.patch \
     file://0001-lib-mpi-Use-static-inline-instead-of-extern-inline-i.patch \
-    file://0001-cvmx-pcie-disable-via-config-option.patch \
+    file://0001-Octeon-update-executive-files-to-latest-SDK.patch \
+    file://0002-Octeon-update-header-files-to-latest-SDK.patch \
+    file://0003-Octeon-update-error-tree-to-latest-SDK.patch \
+    file://0004-Octeon-update-mips-pci-files-to-latest-SDK.patch \
+    file://0005-Octeon-update-78xx-error-and-add-two-new-boards.patch \
     "
 
 KCONF_BSP_AUDIT_LEVEL = "0"
