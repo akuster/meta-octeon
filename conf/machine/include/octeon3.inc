@@ -1,6 +1,6 @@
 # Cavium Octeon III
 
-DEFAULTTUNE ?= "octeon3"
+DEFAULTTUNE ?= "octeon2"
 include conf/machine/include/octeon.inc
 
 KERNEL_IMAGETYPE ?= "vmlinux.64"
